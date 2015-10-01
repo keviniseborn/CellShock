@@ -1,0 +1,140 @@
+package com.example.cellshock;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Random;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+
+@SuppressLint("WrongCall")//Needed to suppress the lint error
+public class ScreenView extends SurfaceView implements Runnable{
+	
+	Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.bckground);
+	SurfaceHolder holder; //Surface holder for the canvas
+	private boolean ok = false; //Boolean to control pause and resume
+	
+	Thread t = null; //Thread for the game logic
+
+	Cell[] ballArray = new Cell[2]; //array of balls
+
+	private Score score = new Score(20);
+	Random generator = new Random(); 
+	Paint paint = new Paint();
+	private Collision collision = new Collision();
+	ArrayList<Cell> cells = null;
+	
+	public ScreenView(Context context, int w, int h) {
+	super(context);
+	holder = getHolder();//Used for the screenview
+	  
+	
+	//Code to be used in the ScreenView class
+			  
+		        try {  
+		            XMLPullParserHandler parser = new XMLPullParserHandler();  
+		            InputStream is=context.getAssets().open("levelone.xml");  
+		            cells = parser.parse(is);  
+		            
+		            for (int i = 0; i < cells.size(); i++){
+		            	Log.d("Cell", String.valueOf(cells.get(i).getxPos()));
+		            }
+		            
+		              
+		        } catch (IOException e) {e.printStackTrace();}  
+		          
+		     
+			//Up to here
+
+
+	//Bouncing ball
+	int x = 25;
+	int y = 150;
+	int ra = 20;
+    int r = 0;
+    int g = 255;
+    int b = 0;
+    int v = 1;
+    
+
+	
+    //this.ballArray[0] = new Cell(ra,x,y,v,0,Color.rgb(r,g,v),20);
+	this.cells[0].setScreenWidth(w);
+	 this.ballArray[0].setScreenHeight(h);
+	 
+	 this.ballArray[1] = new Cell(ra,150,y,0,0,Color.rgb(r,g,v),20);
+	 this.ballArray[1].setScreenWidth(w);
+	 this.ballArray[1].setScreenHeight(h);
+	}
+	
+	 
+	
+	protected void onDraw(Canvas canvas){
+		//As with other threads, here is where we can update the assets such as.....
+		//canvas.drawARGB(255, 100, 100,0); //Add a background colour
+		
+		paint.setColor(Color.RED);
+		canvas.drawBitmap(background, 0, 0, paint);
+		//b.recycle();
+
+		
+		this.ballArray[0].update();
+		this.ballArray[0].drawCell(paint, canvas);
+		 this.ballArray[1].update();
+		 this.ballArray[1].drawCell(paint, canvas);
+		
+		if( this.ballArray[0].circleCircleCollision(this.ballArray[1])) this.ballArray[0].resolve( this.ballArray[1]); //this.ballArray[0].resolve(this.ballArray[1]);
+		 canvas.drawText(score.getScoreString(), 150, 300, paint);
+    }
+	
+	public void run() {
+		//Remove conflict between the UI thread and the game thread.
+		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+		
+		while (ok == true){
+			//perform canvas drawing
+			if(!holder.getSurface().isValid()){//if surface is not valid
+				continue;//skip anything below it
+			}
+			Canvas c = holder.lockCanvas(); //Lock canvas, paint canvas, unlock canvas
+			this.onDraw(c);
+			holder.unlockCanvasAndPost(c);
+		}
+	}
+	
+	public void pause(){
+		ok = false;
+		while(true){
+			try{
+				t.join();
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			}
+			break;
+		}
+		t = null;
+	}
+	
+	public void resume(){
+		ok = true;
+		t = new Thread(this);
+		t.start();
+	}
+	
+	public void updatePos(float xPos, float yPos){
+		
+	}
+	
+	public void startBall(int velX, int velY){
+
+	}
+}

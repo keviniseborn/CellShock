@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	 xmlns:android="http://schemas.android.com/apk/res/android"
+	 android:orientation="vertical"
+	 android:layout_width="match_parent"
+	 android:layout_height="match_parent"
+	 android:background="@drawable/options">
+
+	
+	<Switch
+	      android:id="@+id/toggleMusic"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:checked="true"
+	    android:enabled="true"
+	    android:onClick="toggleMusic"
+	    android:background="@drawable/buttoncolours"
+	    android:text="@string/toggle_music"
+	    android:layout_gravity="center"
+	    android:layout_marginTop="100dp"
+        android:layout_marginBottom="10dp"
+	    />
+	
+	<Switch
+	android:id="@+id/toggleSound"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:checked="true"
+	    android:enabled="true"
+	    android:onClick="toggleSound"
+	    android:background="@drawable/buttoncolours"
+	    android:text="@string/toggle_sound"
+	    android:layout_gravity="center"
+	    android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+	    />
+
+	
+	<Button
+   		android:id="@+id/mainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="mainMenu"
+        android:background="@drawable/buttoncolours"
+        android:layout_gravity="center"
+        android:text="@string/Main_Menu" />
+</LinearLayout>

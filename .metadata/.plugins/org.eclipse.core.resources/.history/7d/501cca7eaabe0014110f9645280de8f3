@@ -1,0 +1,193 @@
+package com.example.cellshock;
+
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.Log;
+import java.lang.Math;
+
+
+public class Cell extends Collision{
+	private int radius;
+	float mass;
+	private float xPos, yPos;
+	private float xVel, yVel;
+	private int colour;
+	private int screenWidth;
+	private int screenHeight;
+
+	
+	public Cell (int radiusIn, int xPosIn, int yPosIn, float xVelocity, float yVelocity, int c, float m){
+		this.radius = radiusIn;
+		this.xPos = xPosIn;
+		this.yPos = yPosIn;
+		this.xPos = this.xPos - this.radius;
+    	this.yPos = this.yPos - this.radius;
+		
+		this.xVel = xVelocity;
+		this.yVel = yVelocity;
+		this.colour = c;
+		this.mass = m;
+	}
+	
+	public Cell (){
+		radius = 25;
+		xPos = 0;
+		yPos = 0;
+		mass = 10;
+		xVel = 10;
+		yVel = 10;
+		colour = Color.GREEN;
+	}
+	
+	//Method to draw a circle on screen
+	public void drawCell(Paint p, Canvas c){
+		p.setStrokeWidth(3);
+	    p.setColor(colour);
+		c.drawCircle((float)xPos, (float)yPos, radius, p);
+	}
+	
+	//update the position of the ball and check for collision to walls
+	// Detect collision and update the position of the ball.
+    public void update() {
+    	//Set the speed of the ball
+    	this.xPos = this.xPos + this.xVel;
+    	this.yPos = this.yPos + this.yVel;
+    	
+    	//Detect collisions
+    	if (this.xPos + this.radius >= this.screenWidth){
+    		this.xVel = -this.xVel;
+    		this.xPos = this.screenWidth - this.radius;
+    	}else if (this.xPos + this.radius <= 0){
+    		this.xVel = -this.xVel;
+    		this.xPos = 0 + this.radius;
+    	}
+    	
+    	
+    		if (this.yPos + this.radius >= this.screenWidth){
+        		this.yVel = -this.yVel;
+        		this.yPos = this.screenWidth - this.radius;
+        	}else if (this.yPos + this.radius <= 0){
+        		this.yVel = -this.yVel;
+        		this.yPos = 0 + this.radius;
+        	}
+    	
+    }
+	
+	//Set the ball radius
+	public void setRadius (int radiusIn){
+		this.radius = radiusIn;
+	}
+	
+	//Set the ball x position
+	public void setxPos (float xPosIn){
+		this.xPos = xPosIn;
+	}
+	
+	//Set the ball y position
+	public void setyPos (float yPosIn){
+		this.yPos = yPosIn;
+	}
+	
+	//Set the colour of the ball
+	public void setColour (int c){
+		this.colour = c;
+	}
+	
+	public void setMass(float m)
+	{
+		this.mass = m;
+	}
+	
+	public float getMass()
+	{
+		return this.mass;
+	}
+	//Get the radius of the ball
+	public int getRadius() {
+		return this.radius;
+	}
+	
+	//Get the x position of the ball
+	public float getxPos (){
+		return this.xPos;
+	}
+	
+	//Get the y position of the ball
+	public float getyPos (){
+			return this.yPos;
+	}
+	
+	//Get the colour of the ball as an int 
+	public int getColour (){
+		return this.colour;
+	}
+
+	
+	//Set the screen width
+	public void setScreenWidth(int w){
+		this.screenWidth = w;
+	}
+	
+	//Set the screen height
+	public void setScreenHeight(int h){
+		this.screenHeight = h;
+	}
+	
+	public void blockCollision(){
+		this.xVel = -this.xVel;
+		this.yVel = -yVel;
+		}
+	
+	public void setVelocity(float x, float y){
+		this.xVel = x;
+		this.yVel = y;
+	}
+	
+	public float getXVelocity()
+	{
+		return this.xVel;
+	}
+	
+	public float getYVelocity()
+	{
+		return this.yVel;
+	}
+
+	public boolean circleCircleCollision(Cell cellOther){
+
+		
+		float dist = (float) 	(Math.sqrt(this.xPos - cellOther.getxPos()) *(this.xPos - cellOther.getxPos())
+								+ ((this.yPos - cellOther.getyPos()) * (this.yPos - cellOther.getyPos())));
+		float radiusSum = (this.radius + cellOther.getRadius());
+		radiusSum = radiusSum * radiusSum;
+		Log.d("ADebugTag", "cell 1 r: " + Float.toString(this.radius));
+		Log.d("ADebugTag", "cell 2 r: " + Float.toString(cellOther.getRadius()));
+		if(dist <= radiiSum)
+		{
+			this.colour = Color.RED;
+			cellOther.colour = Color.RED;
+			return true;
+		}else{ 
+			this.colour = Color.GREEN;
+			cellOther.colour = Color.BLUE;
+			return false;}
+	}
+	
+	public void resolve(Cell cellOther){
+		
+		float negMassDiff = this.mass - cellOther.getMass();
+		float posMassDiff = this.mass + cellOther.getMass();
+		float negOtherMassDiff = cellOther.getMass() - this.mass ;
+		float posOtherMassDiff = cellOther.getMass() + this.mass ;
+		
+		float newVelX1 = (this.xVel * (negMassDiff) + (2 * cellOther.getMass() * cellOther.getXVelocity())) / (posMassDiff);
+		float newVelY1 = (this.yVel * (negMassDiff) + (2 * cellOther.getMass() * cellOther.getYVelocity())) / (posMassDiff);
+		float newVelX2 = (cellOther.getXVelocity() * (negOtherMassDiff) + (2 * this.mass * this.xVel)) / (posMassDiff);
+		float newVelY2 = (cellOther.getYVelocity() * (negOtherMassDiff) + (2 * this.mass * this.yVel)) / (posMassDiff);
+		
+		this.setVelocity(newVelX1, newVelY1);
+		cellOther.setVelocity(newVelX1, newVelY1);
+	}
+}

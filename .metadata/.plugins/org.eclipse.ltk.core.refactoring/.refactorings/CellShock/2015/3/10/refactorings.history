@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;CellShock/res/drawable-hdpi/laser sprite.png&apos; to &apos;lasersprite.png&apos;" description="Rename resource &apos;laser sprite.png&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/drawable-hdpi/laser sprite.png" name="lasersprite.png" stamp="1425313430749" updateReferences="true"/>
+</session>

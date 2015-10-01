@@ -1,0 +1,172 @@
+package com.example.cellshock;
+
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.Log;
+
+
+public class Cell extends Collision{
+	private int radius;
+	float mass;
+	private float vecPos[];
+	private float vecVelocity[];
+	private int colour;
+	private int screenWidth;
+	private int screenHeight;
+
+	
+	public Cell (int radiusIn, int xPosIn, int yPosIn, float xVel, float yVel, int c, float m){
+		this.radius = radiusIn;
+		this.vecPos = new float[2];
+		vecPos[0] = xPosIn;
+		vecPos[1] = yPosIn;
+		this.vecVelocity = new float[2];
+		vecVelocity[0] = xVel;
+		vecVelocity[1] = yVel;
+		colour = c;
+		this.mass = m;
+	}
+	
+	public Cell (){
+		this.radius = 15;
+		vecPos[0] = 0;
+		vecPos[1] = 0;
+		this.mass = 10;
+		this.vecVelocity[0] = 10;
+		this.vecVelocity[1] = 10;
+		colour = Color.GREEN;
+	}
+	
+	//Method to draw a circle on screen
+	public void drawCell(Paint p, Canvas c){
+		p.setStrokeWidth(3);
+	    p.setColor(colour);
+		c.drawCircle((float)vecPos[0], (float)vecPos[1], radius, p);
+	}
+	
+	//update the position of the ball and check for collision to walls
+	// Detect collision and update the position of the ball.
+    public void update() {
+    	//Set the speed of the ball
+    	vecPos[0] = this.vecPos[0] + this.vecVelocity[0];
+    	vecPos[1] = this.vecPos[1] + this.vecVelocity[1];
+    	
+    	//Detect collisions
+    	if (this.vecPos[0] + this.radius >= this.screenWidth){
+    		this.vecVelocity[0] = -this.vecVelocity[0];
+    		this.vecPos[0] = this.screenWidth - this.radius;
+    	}else if (this.vecPos[0] + this.radius <= 0){
+    		this.vecVelocity[0] = -this.vecVelocity[0];
+    		this.vecPos[0] = 0 + this.radius;
+    	}
+    	
+    	
+    		if (this.vecPos[1] + this.radius >= this.screenWidth){
+        		this.vecVelocity[1] = -this.vecVelocity[1];
+        		this.vecPos[1] = this.screenWidth - this.radius;
+        	}else if (this.vecPos[1] + this.radius <= 0){
+        		this.vecVelocity[1] = -this.vecVelocity[1];
+        		this.vecPos[1] = 0 + this.radius;
+        	}
+    	
+    }
+	
+	//Set the ball radius
+	public void setRadius (int radiusIn){
+		this.radius = radiusIn;
+	}
+	
+	//Set the ball x position
+	public void setxPos (float xPosIn){
+		this.vecPos[0] = xPosIn;
+	}
+	
+	//Set the ball y position
+	public void setyPos (float yPosIn){
+		this.vecPos[1] = yPosIn;
+	}
+	
+	//Set the colour of the ball
+	public void setColour (int c){
+		this.colour = c;
+	}
+	
+	public void setMass(float m)
+	{
+		this.mass = m;
+	}
+	
+	public float getMass()
+	{
+		return this.mass;
+	}
+	//Get the radius of the ball
+	public int getRadius() {
+		return this.radius;
+	}
+	
+	//Get the x position of the ball
+	public float getxPos (){
+		return this.vecPos[0];
+	}
+	
+	//Get the y position of the ball
+		public float getyPos (){
+			return this.vecPos[1];
+		}
+	
+	//Get the colour of the ball as an int 
+	public int getColour (){
+		return this.colour;
+	}
+
+	
+	//Set the screen width
+	public void setScreenWidth(int w){
+		this.screenWidth = w;
+	}
+	
+	//Set the screen height
+	public void setScreenHeight(int h){
+		this.screenHeight = h;
+	}
+	
+	public void blockCollision(){
+		//this.xVel = -this.xVel;
+		this.vecVelocity[1] = -this.vecVelocity[1];
+		}
+	
+	public void setVelocity(float x, float y){
+		this.vecVelocity[0] = x;
+		this.vecVelocity[1] = y;
+	}
+	
+	public float getXVelocity()
+	{
+		return this.vecVelocity[0];
+	}
+	
+	public float getYVelocity()
+	{
+		return this.vecVelocity[1];
+	}
+
+	public boolean circleCircleCollision(Cell cellOther){
+		float x1 = cell.getxPos();
+		float x2 = cellOther.getxPos();
+		float y1 = cell.getxPos();
+		float y2 = cellOther.getxPos();
+		float dX = x1 - x2;
+		float dY = y1 - y1;
+		float dotP = Vector2D.dot(dX, dY, x2, y2);//d.dot(c2);
+		float dist = dotP * dotP;
+		float radiiSum = (cell.getRadius() + cellOther.getRadius()) * (cell.getRadius() + cellOther.getRadius());
+		
+		if(dist <= radiiSum)
+		{
+			return true;
+		}else{ return false;}
+	}
+}

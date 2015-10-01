@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<cell>  
+    <cell>
+        <cellActive>0</cellActive>
+        <cellType>1</cellType>
+        <xPos>-300</xPos>
+        <yPos>-500</yPos>
+        <xVel>0</xVel>
+        <yVel>0</yVel>       
+    </cell> 
+    <cell>  
+        <cellType>1</cellType>
+        <xPos>70</xPos>
+        <yPos>100</yPos>
+        <xVel>1</xVel>
+        <yVel>1</yVel>       
+    </cell>  
+    <cell>  
+        <cellType>1</cellType>
+        <xPos>150</xPos>
+        <yPos>100</yPos>
+        <xVel>-1</xVel>
+        <yVel>-1</yVel>   
+    </cell> 
+    <cell>  
+        <cellType>1</cellType>
+        <xPos>150</xPos>
+        <yPos>175</yPos>
+        <xVel>1</xVel>
+        <yVel>-1</yVel>   
+    </cell>
+    <cell>  
+        <cellType>1</cellType>
+        <xPos>40</xPos>
+        <yPos>200</yPos>
+        <xVel>-1</xVel>
+        <yVel>1</yVel>   
+    </cell>
+    <cell>  
+        <cellType>4</cellType>
+        <xPos>200</xPos>
+        <yPos>200</yPos>
+        <xVel>1</xVel>
+        <yVel>1</yVel>   
+    </cell> 
+</cell>
